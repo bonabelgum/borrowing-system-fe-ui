@@ -1,0 +1,276 @@
+body {
+    background: transparent !important;
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif !important;
+    padding: 30px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+h1 {
+    color: #193B68;
+    font-weight: 600;
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Add button */
+.add-btn {
+    background-color: #2D69C9;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: 0.3s;
+}
+
+.add-btn:hover {
+    background-color: #24529c;
+}
+
+/* Modal Backdrop */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+
+.modal-backdrop.show {
+    background-color: rgba(0, 0, 0, 0.4);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal {
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px; /* Added width to make it more spacious */
+    position: relative;
+    max-width: 90%; 
+    display: block;
+}
+
+/* Close Button */
+.modal .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+}
+
+/* Form Group */
+.form-group {
+    margin-bottom: 15px;
+}
+h2 {
+    font-weight: normal;
+}
+/* Form Labels */
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+/* Form Inputs */
+.form-group input {
+    width: 100%; /* Ensures inputs take up full width of their container */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box; /* Ensures padding doesn't increase input width */
+}
+/* Save Button */
+.save-btn {
+    background-color: #45a049;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    width: 100%;
+    transition: 0.3s;
+}
+.save-btn:hover {
+    background-color: #45a049;
+}
+/*TABLE*/
+.table {
+    border-spacing: 0;      
+    border-radius: 7px;       
+    overflow: hidden;     
+}
+.table-container {
+    margin-top: 20px;
+}
+.table th, .table td {
+    text-align: center;
+}
+.table th {
+    background-color: #b9d5fa;
+}
+.email-btn, .thumbs-up-btn {
+    margin: 5px;
+}
+.email-btn:hover, .thumbs-up-btn:hover {
+    cursor: pointer;
+}
+.add-btn {
+    font-size: 14px;
+}
+.email-btn {
+    background-color: #2D69C9 !important;
+    color: white;
+    border: none;
+}
+.thumbs-up-btn {
+    background-color: #4CAF50 !important; 
+    color: white;
+    border: none;
+}
+.email-btn, .thumbs-up-btn {
+    color: white !important;
+}
+/* Sorting indicators */
+.sortable {
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+}
+.sortable:hover {
+    background-color: #9fbfe9;
+}
+.table tbody tr {
+    background-color: #ffffff;
+}
+/* Odd rows */
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #ffffff; 
+}
+/* Even rows */
+.table-striped tbody tr:nth-of-type(even) {
+    background-color: #e9eef7;
+}
+/* Optional: hover effect */
+.table tbody tr:hover {
+    background-color: #9fbfe9; /* highlight on hover */
+}
+
+.sortable::after {
+    content: "";
+    margin-left: 5px;
+    font-size: 12px;
+    opacity: 0.5;
+}
+
+.sortable.asc::after {
+    content: "";
+    opacity: 1;
+}
+
+.sortable.desc::after {
+    content: "";
+    opacity: 1;
+}
+
+/* REMARK */
+#remarksModalBackdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+#remarksModalBackdrop.show {
+    background-color: rgba(0, 0, 0, 0.4);
+    opacity: 1;
+    pointer-events: auto;
+}
+/* Remarks Modal Content */
+#remarksModalBackdrop .modal {
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;         /* default width */
+    max-width: 90%;       /* responsive on small screens */
+    display: block;
+    
+    /* auto-fit height to content */
+    height: auto;         
+    max-height: 90vh;     /* prevent it from exceeding viewport */
+    overflow-y: auto;     /* scroll only if content is too tall */
+    box-sizing: border-box;
+}
+/* Close Button inside Remarks Modal */
+#remarksModalBackdrop .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+}
+/*camera*/
+.camera-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+/* Video styling */
+#qrVideo {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    z-index: 1;
+}
+/* Close button for camera */
+#closeCameraBtn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    color: white;
+    border: none;
+    font-size: 20px;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    z-index: 2;  /* ensure it's above the video */
+}

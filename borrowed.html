@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Borrowed Items</title>
+    <!-- Link to Bootstrap and FontAwesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0-alpha1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="borrowed.css">
+</head>
+<body>
+
+<div class="header">
+    <h1>Borrowed Items</h1>
+    <button class="add-btn"><i class="fa fa-plus"></i> Add</button>
+</div>
+
+<!-- Modal -->
+<div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal">
+        <button class="close-btn" id="closeModal">&times;</button>
+        <h2>Item Borrowing Form</h2>
+        <div class="camera-container" id="cameraContainer" style="display:none;">
+            <button class="close-btn" id="closeCameraBtn">&times;</button>
+            <video id="qrVideo" autoplay></video>
+        </div>
+
+        <form id="borrowForm">
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 5px;">
+                <label for="itemName">Item Name</label>
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <input type="text" id="itemName" name="itemName" list="itemSuggestions" placeholder="Type to search..." />
+                    <button type="button" id="cameraBtn" style="background:none; border:none; cursor:pointer;">
+                        <i class="fa fa-camera" style="font-size:18px; color:#4e4e4e;"></i>
+                    </button>
+                </div>
+                <datalist id="itemSuggestions">
+                    <option value="Flat Screw Driver">
+                    <option value="Philip Screw Driver">
+                </datalist>
+            </div>
+            
+            <div class="form-group">
+                <label for="borrowerName">Name</label>
+                <input type="text" id="borrowerName" name="borrowerName" required />
+            </div>
+            
+            <div class="form-group">
+                <label for="borrowerEmail">Email</label>
+                <input type="email" id="borrowerEmail" name="borrowerEmail" required />
+            </div>
+            
+            <div class="form-group">
+                <label for="returnDate">Return Date</label>
+                <input type="date" id="returnDate" name="returnDate" required />
+            </div>
+            
+            <div class="form-group">
+                <label for="quantity">Quantity</label>
+                <input type="number" id="quantity" name="quantity" min="1" required />
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="save-btn">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- Remarks Modal -->
+<div class="modal-backdrop" id="remarksModalBackdrop">
+    <div class="modal">
+        <button class="close-btn" id="closeRemarksModal">&times;</button>
+        <h2>Enter Remarks</h2>
+        <div class="form-group">
+            <label for="remarksInput">Remarks:</label>
+            <input type="text" id="remarksInput" placeholder="Enter remarks here..." />
+        </div>
+        <div class="form-group">
+            <button class="btn btn-success" id="saveRemarksBtn">Save</button>
+        </div>
+    </div>
+</div>
+
+ <!-- Table with search and sorting feature -->
+    <div class="table-container">
+        <div class="row mb-3">
+            <div class="col-12">
+                <input class="form-control" id="searchInput" type="text" placeholder="Search Borrowed Items" onkeyup="searchTable()">
+            </div>
+        </div>
+        <div class="table-responsive">
+        <table class="table table-striped table-bordered" id="borrowedItemsTable">
+            <thead>
+                <tr>
+                    <th class="sortable" data-sort="number">No.</th>
+                    <th class="sortable" data-sort="item">Item Name</th>
+                    <th class="sortable" data-sort="borrower">Name</th>
+                    <th class="sortable" data-sort="date">Return Date</th>
+                    <th class="sortable" data-sort="quantity">Quantity</th>
+                    <th class="sortable" data-sort="status">Status</th>
+                    <th class="sortable" data-sort="email">Email</th>
+                    <th class="sortable" data-sort="remarks">Remarks</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Flat Screw Driver</td>
+                    <td>John Doe</td>
+                    <td>2026-04-10</td>
+                    <td>2</td>
+                    <td>Pending</td>
+                    <td>john.doe@example.com</td>
+                    <td></td>
+                    <td>
+                        <button class="btn btn-info btn-sm email-btn">Email</button>
+                        <button class="btn btn-success btn-sm thumbs-up-btn">👍</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Philip Screw Driver</td>
+                    <td>Jane Smith</td>
+                    <td>2026-03-30</td>
+                    <td>1</td>
+                    <td>Returned</td>
+                    <td>jane.smith@example.com</td>
+                    <td>Good Condition</td>
+                    <td>
+                        <button class="btn btn-info btn-sm email-btn">Email</button>
+                        <button class="btn btn-success btn-sm thumbs-up-btn">👍</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    const addBtn = document.querySelector('.add-btn');
+    const modalBackdrop = document.getElementById('modalBackdrop');
+    const closeModalBtn = document.getElementById('closeModal');
+    const borrowForm = document.getElementById('borrowForm');
+    // Show modal when Add button is clicked
+    addBtn.addEventListener('click', () => {
+        modalBackdrop.classList.add('show');
+    });
+    // Close modal when X button is clicked
+    closeModalBtn.addEventListener('click', () => {
+        confirmCloseModal();
+    });
+    // Function to confirm closing the modal without saving
+    function confirmCloseModal() {
+        const confirmation = confirm("Are you sure you want to close this? Your changes will not be saved.");
+        if (confirmation) {
+            modalBackdrop.classList.remove('show');
+        }
+    }
+    // Close modal when clicking outside the modal content
+    modalBackdrop.addEventListener('click', (e) => {
+        if (e.target === modalBackdrop) {
+            confirmCloseModal();
+        }
+    });
+    // Prevent form submission for now (you can handle it later)
+    borrowForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        // Handle form submission here
+        alert("Form submitted!");
+    });
+    //table
+    // Search functionality for the table
+    function searchTable() {
+        let input = document.getElementById("searchInput");
+        let filter = input.value.toLowerCase();
+        let table = document.getElementById("borrowedItemsTable");
+        let tr = table.getElementsByTagName("tr");
+
+        for (let i = 1; i < tr.length; i++) {
+            let td = tr[i].getElementsByTagName("td");
+            let showRow = false;
+
+            for (let j = 0; j < td.length; j++) {
+                if (td[j]) {
+                    if (td[j].textContent.toLowerCase().indexOf(filter) > -1) {
+                        showRow = true;
+                        break;
+                    }
+                }
+            }
+
+            if (showRow) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+
+    // Action button handlers (Email and Thumbs Up)
+    document.querySelectorAll('.email-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            const confirmation = confirm("Do you want to send a reminder email to the borrower?");
+            if (confirmation) {
+                alert("Reminder email sent!");
+            }
+        });
+    });
+    // Disable action buttons if status is "Returned"
+    document.querySelectorAll('#borrowedItemsTable tbody tr').forEach(row => {
+        const statusCell = row.cells[5]; // 6th column = Status
+        if (statusCell && statusCell.textContent.trim().toLowerCase() === 'returned') {
+            const emailBtn = row.querySelector('.email-btn');
+            const thumbsUpBtn = row.querySelector('.thumbs-up-btn');
+
+            if (emailBtn) emailBtn.disabled = true;
+            if (thumbsUpBtn) thumbsUpBtn.disabled = true;
+        }
+    });
+    // Sorting functionality
+    let currentSortColumn = null;
+    let currentSortDirection = 'asc';
+
+    function sortTable(column, columnIndex) {
+        const table = document.getElementById('borrowedItemsTable');
+        const tbody = table.querySelector('tbody');
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+        
+        // Determine sort direction
+        if (currentSortColumn === column) {
+            currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            currentSortDirection = 'asc';
+            currentSortColumn = column;
+        }
+        
+        // Remove existing sort indicators
+        document.querySelectorAll('.sortable').forEach(th => {
+            th.classList.remove('asc', 'desc');
+        });
+        
+        // Add sort indicator to current column
+        const currentHeader = document.querySelector(`.sortable[data-sort="${column}"]`);
+        if (currentHeader) {
+            currentHeader.classList.add(currentSortDirection);
+        }
+        
+        // Sort rows
+        rows.sort((rowA, rowB) => {
+            let cellA = rowA.cells[columnIndex].textContent.trim();
+            let cellB = rowB.cells[columnIndex].textContent.trim();
+            
+            // Handle numeric values
+            if (column === 'number' || column === 'quantity') {
+                cellA = parseInt(cellA) || 0;
+                cellB = parseInt(cellB) || 0;
+            }
+            
+            // Handle date values
+            if (column === 'date') {
+                cellA = new Date(cellA);
+                cellB = new Date(cellB);
+            }
+            
+            // Compare based on sort direction
+            if (cellA < cellB) return currentSortDirection === 'asc' ? -1 : 1;
+            if (cellA > cellB) return currentSortDirection === 'asc' ? 1 : -1;
+            return 0;
+        });
+        
+        // Reorder rows in the table
+        rows.forEach(row => tbody.appendChild(row));
+    }
+
+    // Attach click handlers to sortable headers
+    document.querySelectorAll('.sortable').forEach((header, index) => {
+        header.addEventListener('click', () => {
+            const sortType = header.getAttribute('data-sort');
+            sortTable(sortType, index);
+        });
+    });
+    //remark model
+    const remarksModal = document.getElementById('remarksModalBackdrop');
+    const closeRemarksBtn = document.getElementById('closeRemarksModal');
+    const saveRemarksBtn = document.getElementById('saveRemarksBtn');
+    const remarksInput = document.getElementById('remarksInput');
+
+    let currentRow = null; // store the row being edited
+    // Open remarks modal on thumbs-up click
+    document.querySelectorAll('.thumbs-up-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            const confirmation = confirm("Has the borrower returned the items?");
+            if (confirmation) {
+                // store current row
+                currentRow = button.closest('tr');
+
+                // show remarks modal
+                remarksInput.value = ''; // clear previous input
+                remarksModal.classList.add('show');
+            }
+        });
+    });
+    // Close remarks modal without saving
+    closeRemarksBtn.addEventListener('click', () => {
+        remarksModal.classList.remove('show');
+        currentRow = null;
+    });
+    // Save remarks and update table
+    saveRemarksBtn.addEventListener('click', () => {
+        if (!currentRow) return;
+        // get remarks input
+        const remarks = remarksInput.value.trim();
+        // update Remarks column (8th column, index 7)
+        currentRow.cells[7].textContent = remarks;
+        // update Status column to Returned (6th column, index 5)
+        currentRow.cells[5].textContent = 'Returned';
+        // disable buttons
+        const emailBtn = currentRow.querySelector('.email-btn');
+        const thumbsUpBtn = currentRow.querySelector('.thumbs-up-btn');
+
+        if (emailBtn) emailBtn.disabled = true;
+        if (thumbsUpBtn) {
+            thumbsUpBtn.disabled = true;
+            thumbsUpBtn.innerText = "✔️";
+        }
+        // hide modal
+        remarksModal.classList.remove('show');
+        currentRow = null;
+
+        alert("Item marked as returned with remarks!");
+    });
+// optional: click outside to close modal
+    remarksModal.addEventListener('click', (e) => {
+        if (e.target === remarksModal) {
+            remarksModal.classList.remove('show');
+            currentRow = null;
+        }
+    });
+//camera
+const cameraBtn = document.getElementById('cameraBtn');
+const cameraContainer = document.getElementById('cameraContainer');
+const closeCameraBtn = document.getElementById('closeCameraBtn');
+const qrVideo = document.getElementById('qrVideo');
+
+let cameraStream = null;
+
+cameraBtn.addEventListener('click', async () => {
+    cameraContainer.style.display = 'block';
+    try {
+        cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+        qrVideo.srcObject = cameraStream;
+    } catch (err) {
+        alert("Camera not accessible: " + err);
+    }
+});
+
+closeCameraBtn.addEventListener('click', () => {
+    cameraContainer.style.display = 'none';
+    if (cameraStream) {
+        cameraStream.getTracks().forEach(track => track.stop());
+    }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0-alpha1/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

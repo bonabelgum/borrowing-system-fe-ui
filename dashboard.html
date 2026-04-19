@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- QR Scanner Library -->
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <!-- Add these to the <head> section of your HTML file -->
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+<div class="header">
+    <h1>Hello Dashboard</h1>
+
+    <div class="search-container">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Search tools...">
+        </div>
+        <button class="scan-btn">Scan</button>
+        <button id="notifBtn" class="notif-btn">
+            <i class="fa fa-bell"></i>
+        </button>
+        <!-- Notification bubble -->
+                <div id="notifBubble" class="notif-bubble">
+                    <div class="notif-header">
+                        <span>Notifications</span>
+                        <button id="closeNotif">&times;</button>
+                    </div>
+                    <div class="notif-content" id="notifContent">
+                        <!-- Filled dynamically with JS -->
+                    </div>
+                </div>
+        <!-- Camera Modal -->
+        <div class="modal fade" id="cameraModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius:15px;">
+                
+                <div class="modal-header">
+                    <h5 class="modal-title">Scan QR Code</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body text-center">
+                    <div id="reader" style="width:100%;"></div>
+                </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- Search Result Modal -->
+        <div class="modal fade" id="searchModal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content modern-modal">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Item Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="qr-image-container">
+                        <img src="assets/qr.png" alt="QR Code" class="img-fluid">
+                    </div>
+                    <form id="itemForm">
+
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                        <label>Item Name</label>
+                        <input type="text" class="form-control" value="Screwdriver" disabled>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Category</label>
+                            <select class="form-control" id="categoryField" disabled>
+                                <option>Electronics</option>
+                                <option>Driving</option>
+                                <option selected>CSS</option>
+                                <option>Automotive</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Type</label>
+                            <select class="form-control" id="typeField" disabled>
+                                <option selected>Tools</option>
+                                <option>Equipment</option>
+                                <option>Materials</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                        <label>Serial No.</label>
+                        <input type="text" class="form-control" value="Yxxxxxxxx3" disabled>
+                        </div>
+
+                        <div class="col-md-6">
+                        <label>Model</label>
+                        <input type="text" class="form-control" value="P6xxxx" disabled>
+                        </div>
+
+                        <div class="col-md-3">
+                        <label>Consumable</label>
+                        <input type="text" class="form-control" value="No" disabled>
+                        </div>
+
+                        <div class="col-md-3">
+                        <label>Defective</label>
+                        <input type="number" class="form-control" value="0" disabled>
+                        </div>
+
+                        <div class="col-md-3">
+                        <label>Condition</label>
+                        <select class="form-control" id="conditionField" disabled>
+                                <option>Good</option>
+                                <option selected>Bad</option>
+                        </select>
+                        </div>
+
+                        <div class="col-md-3">
+                        <label>Status</label>
+                        <select class="form-control" id="statusField" disabled>
+                                <option selected>Returned</option>
+                                <option>Not yet returned</option>
+                        </select>
+                        </div>
+
+                        <div class="col-12">
+                        <label>Description</label>
+                        <textarea class="form-control" rows="3" disabled>Assorted color and all usable</textarea>
+                        </div>
+                    </div>
+
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button id="editBtn" class="btn btn-success">Edit</button>
+                    <button id="saveBtn" class="btn btn-primary d-none">Save</button>
+                </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--columns-->
+<div class="main-layout">
+    <div class="left">
+        <!--ONE-->
+        <div class="box dashboard-widgets">
+
+    <div class="widget total">
+        <h3>Total Items</h3>
+        <p class="value">564</p>
+        <div class="details">
+            <span>+25 new this week</span>
+        </div>
+    </div>
+
+    <div class="widget available">
+        <h3>Available</h3>
+        <p class="value">320</p>
+        <div class="details">
+            <span>65% in stock</span>
+        </div>
+    </div>
+
+    <div class="widget borrowed">
+        <h3>Borrowed</h3>
+        <p class="value">102</p>
+        <div class="details">
+            <span>120 borrowed today</span>
+        </div>
+    </div>
+
+    <div class="widget overdue">
+        <h3>Overdue</h3>
+        <p class="value">6</p>
+        <div class="details">
+            <span>Needs attention</span>
+        </div>
+    </div>
+
+</div>
+    <!--TWO-->
+    <div class="box borrowers-box">
+
+        <!-- HEADER -->
+        <div class="borrowers-header" style="padding: 10px 15px;">
+            <h4 style="color: #193B68; margin: 0;">Activity Logs</h4>
+        </div>
+
+        <div class="borrowers-container">
+            
+            <!-- LEFT: User List -->
+            <div class="borrowers-list" id="borrowersList">
+                <div class="borrower active" onclick="selectUser(0)">
+                    <h6>John Doe</h6>
+                    <span>Borrowed Tools</span>
+                </div>
+                <div class="borrower" onclick="selectUser(1)">
+                    <h6>Jane Smith</h6>
+                    <span>Borrowed Tools</span>
+                </div>
+                <div class="borrower" onclick="selectUser(2)">
+                    <h6>Mark Lee</h6>
+                    <span>Borrowed Tools</span>
+                </div>
+                <!--div class="borrower" onclick="selectUser(3)">
+                    <h6>Anna Cruz</h6>
+                    <span>Borrowed Tools</span>
+                </div>
+                <div class="borrower" onclick="selectUser(4)">
+                    <h6>Paul Reyes</h6>
+                    <span>Borrowed Tools</span>
+                </div-->
+            </div>
+
+            <!-- RIGHT: Details -->
+            <div class="borrower-details" id="borrowerDetails">
+                <h5>John Doe</h5>
+                <p><strong>Email:</strong> johndoe@email.com</p>
+                <p><strong>Tool:</strong> Screwdriver</p>
+                <p><strong>Due:</strong> March 30</p>
+                <p><strong>Status:</strong> Not Returned</p>
+            </div>
+
+        </div>
+    </div>
+    </div>
+
+    <div class="right">
+        <!--THREE-->
+    <div class="box calendar-box">
+    <div class="calendar-header">
+        <button id="prevMonth">&#10094;</button>
+        <span id="monthYear"></span>
+        <button id="nextMonth">&#10095;</button>
+    </div>
+    <div class="calendar-days">
+        <div>MO</div><div>TU</div><div>WE</div><div>TH</div>
+        <div>FR</div><div>SA</div><div>SU</div>
+    </div>
+    <div class="calendar-dates" id="calendarDates"></div>
+</div>
+        
+        <!--FOUR>
+        <div class="box activity-box">
+            <h4 style="color: white; margin: 35;">Activity Log</h4>
+            <div class="activity-table-wrapper">
+                <table class="activity-table">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>User</th>
+                            <th>Activity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0</td>
+                            <td>admin</td>
+                            <td>Rejected zhyra for Registration</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>admin</td>
+                            <td>Approved zhyra for Registration</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>admin</td>
+                            <td>User jester Delete Successfully!</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>princess</td>
+                            <td>princess return 10 pc/s of Flat Screw Driver</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>princess</td>
+                            <td>princess return 10 pc/s of Flat Screw Driver</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div-->
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    let html5QrCode;
+    document.querySelector(".scan-btn").addEventListener("click", () => {
+        const modal = new bootstrap.Modal(document.getElementById('cameraModal'));
+        modal.show();
+
+        setTimeout(() => {
+            html5QrCode = new Html5Qrcode("reader");
+
+            html5QrCode.start(
+                { facingMode: "environment" },
+                {
+                    fps: 10,
+                    qrbox: { width: 250, height: 250 }
+                },
+                (decodedText) => {
+                    alert("QR Code: " + decodedText);
+                    html5QrCode.stop();
+                    modal.hide();
+                },
+                (errorMessage) => {
+                    // ignore scan errors
+                }
+            );
+        }, 500);
+    });
+    // Stop camera when modal is closed
+    document.getElementById('cameraModal').addEventListener('hidden.bs.modal', () => {
+        if (html5QrCode) {
+            html5QrCode.stop().catch(err => console.log(err));
+        }
+    });
+</script>
+<!--search modal-->
+<script>
+    const searchInput = document.getElementById("searchInput");
+
+    searchInput.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+            e.preventDefault(); // prevent form reload (important)
+
+            const value = searchInput.value.trim().toLowerCase();
+
+            if (value === "screwdriver") {
+                const modal = new bootstrap.Modal(document.getElementById('searchModal'));
+                modal.show();
+            }
+        }
+    });
+</script>
+<script>
+    const editBtn = document.getElementById("editBtn");
+    const saveBtn = document.getElementById("saveBtn");
+    const form = document.getElementById("itemForm");
+    const modalEl = document.getElementById('searchModal');
+
+    let isEditing = false;
+
+    editBtn.addEventListener("click", () => {
+        const fields = form.querySelectorAll("input, textarea, select");
+
+        if (!isEditing) {
+            // Enable editing
+            fields.forEach(field => field.disabled = false);
+            editBtn.textContent = "Cancel";
+            saveBtn.classList.remove("d-none");
+            isEditing = true;
+        } else {
+            // Cancel → close modal
+            const modal = bootstrap.Modal.getInstance(modalEl);
+            modal.hide();
+        }
+    });
+
+    saveBtn.addEventListener("click", () => {
+        const confirmSave = confirm("Are you sure you want to save this?");
+
+        if (confirmSave) {
+            alert("Saved successfully!");
+            
+            // Disable again after save
+            form.querySelectorAll("input, textarea, select")
+                .forEach(field => field.disabled = true);
+
+            editBtn.textContent = "Edit";
+            saveBtn.classList.add("d-none");
+            isEditing = false;
+        }
+    });
+</script>
+<script>
+    document.getElementById('searchModal').addEventListener('hidden.bs.modal', () => {
+        const fields = document.querySelectorAll("#itemForm input, #itemForm textarea, #itemForm select");
+        
+        fields.forEach(field => field.disabled = true);
+
+        document.getElementById("editBtn").textContent = "Edit";
+        document.getElementById("saveBtn").classList.add("d-none");
+
+        isEditing = false;
+    });
+</script>
+<!--TWO-->
+<script>
+    const users = [
+        {
+            name: "John Doe",
+            email: "johndoe@email.com",
+            tool: "Screwdriver",
+            due: "March 30",
+            status: "Not Returned"
+        },
+        {
+            name: "Jane Smith",
+            email: "jane@email.com",
+            tool: "Hammer",
+            due: "April 1",
+            status: "Returned"
+        },
+        {
+            name: "Mark Lee",
+            email: "mark@email.com",
+            tool: "Drill",
+            due: "March 28",
+            status: "Overdue"
+        },
+        {
+            name: "Anna Cruz",
+            email: "anna@email.com",
+            tool: "Wrench",
+            due: "April 2",
+            status: "Not Returned"
+        },
+        {
+            name: "Paul Reyes",
+            email: "paul@email.com",
+            tool: "Saw",
+            due: "March 29",
+            status: "Overdue"
+        }
+    ];
+    function selectUser(index) {
+        const user = users[index];
+
+        // Update right panel
+        document.getElementById("borrowerDetails").innerHTML = `
+        <h5>${user.name}</h5>
+
+        <div class="detail-row">
+            <i class="fas fa-envelope"></i>
+            <span class="label">Email</span>
+            <span class="value">${user.email}</span>
+        </div>
+
+        <div class="detail-row">
+            <i class="fas fa-tools"></i>
+            <span class="label">Tool</span>
+            <span class="value">${user.tool}</span>
+        </div>
+
+        <div class="detail-row">
+            <i class="fas fa-calendar"></i>
+            <span class="label">Due</span>
+            <span class="value">${user.due}</span>
+        </div>
+
+        <div class="detail-row">
+            <i class="fas fa-info-circle"></i>
+            <span class="label">Status</span>
+            <span class="value">${user.status}</span>
+        </div>
+    `;
+
+        // Highlight active user
+        document.querySelectorAll(".borrower").forEach((el, i) => {
+            el.classList.toggle("active", i === index);
+        });
+    }
+    selectUser(0);
+</script>
+<!--THREE-->
+<script>
+    const monthYear = document.getElementById('monthYear');
+    const calendarDates = document.getElementById('calendarDates');
+    const prevMonthBtn = document.getElementById('prevMonth');
+    const nextMonthBtn = document.getElementById('nextMonth');
+
+    let today = new Date();
+    let currentMonth = today.getMonth();
+    let currentYear = today.getFullYear();
+
+    const monthNames = [
+    "January","February","March","April","May","June",
+    "July","August","September","October","November","December"
+    ];
+
+    // Array of overdue/marked dates
+    // Format: {year, month (0-11), day, tool, name}
+    const markedDates = [
+        {year: 2026, month: 2, day: 10, tool: "Hammer", name: "Alice"}, 
+        {year: 2026, month: 2, day: 14, tool: "Drill", name: "Bob"},  
+        {year: 2026, month: 2, day: 19, tool: "Saw", name: "Charlie"}   
+    ];
+
+    const dueDates = [
+        {year: 2026, month: 5, day: 1, tool: "Wrench", name: "David"},   // June 1
+        {year: 2026, month: 5, day: 6, tool: "Screwdriver", name: "Eve"}, // June 6
+        {year: 2026, month: 6, day: 3, tool: "Pliers", name: "Frank"}     // July 3
+    ];
+
+    function renderCalendar(month, year) {
+        calendarDates.innerHTML = '';
+
+        // Header
+        monthYear.textContent = `${monthNames[month]} ${year}`;
+
+        // First day of month (Monday = 0)
+        const firstDay = new Date(year, month, 1);
+        let startDay = firstDay.getDay();
+        startDay = (startDay === 0) ? 6 : startDay - 1;
+
+        // Days in month
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        // Empty cells
+        for (let i = 0; i < startDay; i++) {
+            calendarDates.appendChild(document.createElement('div'));
+        }
+
+        // Fill days
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dayCell = document.createElement('div');
+            dayCell.textContent = day;
+
+            // Highlight today
+            if(day === today.getDate() && month === today.getMonth() && year === today.getFullYear()){
+                dayCell.classList.add('today');
+            }
+
+            // Overdue dates (red)
+            markedDates.forEach(mark => {
+                if(mark.day === day && mark.month === month && mark.year === year){
+                    dayCell.classList.add('marked');
+                    dayCell.style.backgroundColor = 'rgb(238, 95, 95, 0.5)';
+                    dayCell.setAttribute('data-tooltip', `Overdue: ${mark.tool}, ${mark.name}`);
+                }
+            });
+
+            // Due dates (blue)
+            dueDates.forEach(due => {
+                if(due.day === day && due.month === month && due.year === year){
+                    dayCell.classList.add('duedate');
+                    dayCell.style.backgroundColor = '#65a579';
+                    dayCell.setAttribute('data-tooltip', `Duedate: ${due.tool}, ${due.name}`);
+                }
+            });
+            calendarDates.appendChild(dayCell);
+        }
+    }
+
+    prevMonthBtn.addEventListener('click', () => {
+        currentMonth--;
+        if(currentMonth < 0){
+            currentMonth = 11;
+            currentYear--;
+        }
+        renderCalendar(currentMonth, currentYear);
+    });
+
+    nextMonthBtn.addEventListener('click', () => {
+        currentMonth++;
+        if(currentMonth > 11){
+            currentMonth = 0;
+            currentYear++;
+        }
+        renderCalendar(currentMonth, currentYear);
+    });
+
+    // Initial render
+    renderCalendar(currentMonth, currentYear);
+</script>
+
+<script>
+    const notifBtn = document.getElementById('notifBtn');
+const notifBubble = document.getElementById('notifBubble');
+const closeNotif = document.getElementById('closeNotif');
+const notifContent = document.getElementById('notifContent');
+
+function populateNotifications() {
+    notifContent.innerHTML = '';
+
+    // Overdue
+    markedDates.forEach(item => {
+        const div = document.createElement('div');
+        div.classList.add('notif-item', 'overdue');
+        div.textContent = `Overdue: ${item.tool}, ${item.name} (${item.day}/${item.month+1}/${item.year})`;
+        notifContent.appendChild(div);
+    });
+
+    // Due dates
+    dueDates.forEach(item => {
+        const div = document.createElement('div');
+        div.classList.add('notif-item', 'duedate');
+        div.textContent = `Duedate: ${item.tool}, ${item.name} (${item.day}/${item.month+1}/${item.year})`;
+        notifContent.appendChild(div);
+    });
+}
+
+// Show/hide bubble
+notifBtn.addEventListener('click', () => {
+    populateNotifications();
+    notifBubble.style.display = notifBubble.style.display === 'block' ? 'none' : 'block';
+});
+
+// Close button
+closeNotif.addEventListener('click', () => {
+    notifBubble.style.display = 'none';
+});
+
+// Optional: close if clicked outside
+document.addEventListener('click', (e) => {
+    if(!notifBubble.contains(e.target) && !notifBtn.contains(e.target)) {
+        notifBubble.style.display = 'none';
+    }
+});
+</script>
+
+</body>
+</html>

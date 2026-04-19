@@ -1,0 +1,586 @@
+body {
+    background: transparent !important;
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif !important;
+    padding: 30px;
+}
+html, body {
+    height: 100%;
+    overflow-y: scroll;      /* enable vertical scrolling */
+    overflow-x: hidden;      
+    scrollbar-width: none;   /* Firefox */
+}
+html::-webkit-scrollbar {
+    width: 0px;              /* Chrome, Safari */
+    background: transparent;
+}
+body::-webkit-scrollbar {
+    width: 0px; 
+    background: transparent;
+}
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+h1 {
+    color: #193B68;
+}
+/*qr*/
+.qr-image-container {
+    text-align: center; /* Center the image */
+    margin-bottom: 20px; /* Add space between image and form */
+}
+.qr-image-container img {
+    max-width: 200px;  /* Limit the max width of the image */
+    width: 100%;       /* Ensure the image is responsive */
+    height: auto;      /* Maintain the aspect ratio */
+    border-radius: 8px; /* Optional: rounded corners */
+}
+
+/* Search + Button container */
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+/* Search box */
+.search-box {
+    display: flex;
+    align-items: center;
+    background: rgb(255, 255, 255);
+    padding: 8px 12px;
+    border-radius: 20px; /* rounded corners */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+.search-box i {
+    color: #193B68;
+    margin-right: 8px;
+}
+.search-box input {
+    border: none;
+    outline: none;
+    font-size: 14px;
+}
+/* Scan button */
+.scan-btn {
+    background-color: #2D69C9;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 20px; /* rounded corners */
+    cursor: pointer;
+    font-size: 17px;
+    transition: 0.3s;
+}
+.scan-btn:hover {
+    background-color: #24529c;
+}
+.left, .right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+/*columns*/
+/* Main layout */
+.main-layout {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+    min-height: calc(100vh - 80px - 30px); /* ensures header/footer space */
+}
+/* Left side (bigger) */
+.left {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+/* Right side (smaller) */
+.right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+/* Just placeholder boxes */
+.box {
+    flex: none;    
+    height: auto;             
+    padding: 5px;
+    border-radius: 10px;
+    font-size: 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    /*background-color: #f1bcef;*/
+}
+/*camera model*/
+.modal-backdrop.show {
+    background-color: rgba(0, 0, 0, 0.4) !important; /* soft dark overlay */
+    opacity: 1 !important;
+}
+/*ONE*/
+
+/* Dashboard widgets layout */
+.dashboard-widgets {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+/* Individual widget cards */
+.widget {
+    padding: 12px;
+    border-radius: 16px;
+    color: #333;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+    font-family: 'Segoe UI', sans-serif;
+}
+/* Title */
+.widget h3 {
+    margin: 0;
+    font-size: clamp(14px, 3vw, 16px);
+    font-weight: 600;
+}
+/* Big number */
+.widget .value {
+    font-size: clamp(16px, 3vw, 24px);
+    font-weight: bold;
+    margin: 10px 0;
+}
+/* Small details */
+.widget .details {
+    font-size: clamp(10px, 2vw, 13px);
+    opacity: 0.8;
+}
+/* Color themes (soft modern tones) */
+.widget.total {
+    background: #f6e7c1;
+}
+.widget.available {
+    background: #d4f5dc;
+}
+.widget.borrowed {
+    background: #dbeafe;
+}
+.widget.overdue {
+    background: #ffe0e0;
+}
+/* Subtle decorative shapes*/
+.widget::after {
+    content: "";
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    background: rgba(0,0,0,0.05);
+    border-radius: 50%;
+    right: -20px;
+    bottom: -20px;
+}
+.dashboard-container {
+    padding: 15px;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+/*search modal*/
+.modern-modal {
+    border-radius: 18px;
+    padding: 10px;
+}
+.modern-modal .modal-body label {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 3px;
+    color: #555;
+}
+.modern-modal .form-control {
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    padding: 8px;
+}
+.modern-modal .form-control:disabled {
+    background-color: #f8f9fa;
+    color: #555;
+}
+.modal-footer .btn {
+    border-radius: 20px;
+    padding: 6px 18px;
+}
+/*TWO COLUMN*/
+.borrowers-box {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+/* Borrowers Layout */
+.borrowers-container {
+    display: flex;
+    gap: 15px;
+    height: 100%;
+    flex: 1;        
+    min-height: 0;   
+    align-items: flex-start;
+}
+
+/* LEFT LIST */
+.borrowers-list {
+    width: 40%;
+    overflow-y: auto;
+    padding-right: 5px;
+    flex-shrink: 0;
+    min-height: 0; /* THIS allows scrolling inside flex */
+    max-height: 100%; /* ensure it does not exceed parent */
+}
+.borrowers-list {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    width: 40%;
+    max-height: 100%;   /* or set a fixed max-height if needed */
+    overflow-y: auto;
+    padding-right: 5px;
+    flex-shrink: 0; 
+}
+/* Each user */
+.borrower {
+    background: #f3f3f3;
+    padding: 10px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.borrower:hover {
+    background: #ffffff;
+}
+
+/* Active user */
+.borrower.active {
+    background: #b9d5fa;
+}
+
+/* RIGHT DETAILS */
+.borrower-details {
+    flex: 1; /* no grow or shrink */
+    background: #b9d5fa;
+    border-radius: 15px;
+    padding: 15px;
+    font-size: 15px;
+    line-height: 1.3;
+    max-width: 60%;  /* optional, controls width */
+}
+
+.borrower-details h5 {
+    margin-bottom: 10px;
+    font-size: 30px;
+    color: #193B68;
+}
+.borrowers-box {
+    height: 400px; /* or any fixed height you want */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+/*RIGHT DETAIl*/
+.detail-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+.detail-row i {
+    width: 18px;
+    text-align: center;
+    color: #193B68;;
+}
+.detail-row .label {
+    font-weight: 600;
+    min-width: 60px;
+    color: #222;
+}
+.detail-row .value {
+    color: #222;
+}
+
+/*FOUR COLUMN*/
+/* Activity Logs Box */
+.activity-box {
+    border-radius: 15px; /* same rounded feel as others */
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+/* Table wrapper for scroll */
+.activity-table-wrapper {
+    overflow-y: auto;
+    max-height: 100%;
+}
+/* Table */
+.activity-table {
+    width: 100%;
+    border-collapse: separate; /* Updated to separate for rounded corners */
+    border-spacing: 0; /* Ensures no space between cells */
+    font-size: 13px;
+    border-radius: 15px; /* Rounded corners on table */
+    overflow: hidden;
+}
+/* Header */
+.activity-table thead {
+    background: linear-gradient(to right, #b9d5fa, #b9d5fa);
+    color: rgb(0, 0, 0);
+}
+.activity-table th {
+    text-align: left;
+    padding: 10px;
+    font-weight: 600;
+}
+/* Rows */
+.activity-table td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+/* Alternating row colors */
+.activity-table tbody tr:nth-child(even) {
+    background: #f5f7fb;
+}
+.activity-table tbody tr:nth-child(odd) {
+    background: #e9eef7;
+}
+/* Hover effect */
+.activity-table tbody tr:hover {
+    background: #9fbfe9;
+}
+/*THREE*/
+.calendar-box {
+    background-color: #dbeafe;
+    color: #193B68;
+    padding: 15px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+}
+.calendar-header button {
+    background: none;
+    border: none;
+    color: #193B68;
+    font-size: 18px;
+    cursor: pointer;
+}
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: #193B68;
+}
+.calendar-dates {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    gap: 5px;
+}
+.calendar-dates div {
+    padding: 8px 0;
+    border-radius: 50%;
+    cursor: default;
+}
+/* Tooltip bubble for today */
+.calendar-dates div.today {
+    position: relative; /* needed for tooltip */
+}
+.calendar-dates div.today::after {
+    content: "Date Today";
+    position: absolute;
+    bottom: 110%; /* above the date bubble */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #193B68;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease-in-out;
+    z-index: 10;
+}
+.calendar-dates div.today:hover::after {
+    opacity: 1;
+}
+/* Generic tooltip for special dates */
+.calendar-dates div.marked {
+    position: relative;
+    color: white;
+    font-weight: bold;
+}
+
+.calendar-dates div.marked::after {
+    content: attr(data-tooltip); /* dynamic tooltip text from JS */
+    position: absolute;
+    bottom: 110%; /* above the circle */
+    white-space: pre-line;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgb(238, 95, 95);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease-in-out;
+    z-index: 10;
+}
+
+.calendar-dates div.marked:hover::after {
+    opacity: 1;
+}
+
+/* Today circle stays green as before */
+.calendar-dates div.today {
+    background-color: rgba(25, 59, 104, 0.5);
+    color: white;
+    font-weight: bold;
+}
+/* Blue tooltip for due dates */
+.calendar-dates div.duedate {
+    position: relative;
+    color: white;
+    font-weight: bold;
+    background-color: #1d743a; /* blue circle */
+}
+
+.calendar-dates div.duedate::after {
+    content: attr(data-tooltip); /* dynamic tooltip text from JS */
+    position: absolute;
+    bottom: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #4a9461;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap; /* <-- forces single line */
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease-in-out;
+    z-index: 10;
+}
+
+.calendar-dates div.duedate:hover::after {
+    opacity: 1;
+}
+/*notif*/
+/* Notification button */
+.notif-btn {
+    background-color: #2D69C9;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+}
+
+.notif-btn:hover {
+    background-color: #24529c;
+}
+
+/* Notification bubble */
+.notif-bubble {
+    position: absolute;
+    top: 50px; /* adjust as needed */
+    right: 0;
+    width: 250px;
+    background: #dbeafe;
+    color: #193B68;
+    border-radius: 12px;
+    padding: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    display: none; /* hidden by default */
+    z-index: 1000;
+}
+
+.notif-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.notif-header button {
+    background: none;
+    border: none;
+    color: #193B68;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.notif-content {
+    max-height: 200px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 13px;
+    scrollbar-width: none;      /* Firefox */
+    -ms-overflow-style: none;   /* IE/Edge */
+}
+/* Hide scrollbar for Chrome, Safari */
+.notif-content::-webkit-scrollbar {
+    display: none;
+}
+
+/* Individual notification item */
+.notif-item {
+    padding: 6px 8px;
+    border-radius: 8px;
+    background-color: #333;
+}
+.notif-item.overdue { background-color: rgb(248, 207, 207); }
+.notif-item.duedate { background-color: rgb(204, 214, 240); }
+
+
+
+@media (max-width: 768px) {
+    /* Main layout container */
+    .main-layout {
+        display: flex;
+        flex-direction: column; /* Stack columns vertically on smaller screens */
+        gap: 15px;
+        height: auto; /* Let the height adjust dynamically on smaller screens */
+        padding: 10px;
+        overflow-y: auto; /* Allow scrolling when the content overflows */
+    }
+    /* Ensure body and content area allow scrolling */
+    body {
+        overflow-y: auto; /* Allow scrolling in body on small screens */
+    }
+    .main-page .content {
+        padding: 10px;
+        overflow-y: auto; /* Enable vertical scrolling if content exceeds screen height */
+    }
+}

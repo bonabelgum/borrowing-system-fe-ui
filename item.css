@@ -1,0 +1,445 @@
+/*html, body {
+    background: transparent !important;
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif !important;
+    padding: 30px;
+    height: 100%;
+}*/
+/* --- Modern hidden page scrollbar --- */
+html, body {
+    background: transparent !important;
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif !important;
+    padding: 18px;
+    height: 100%;
+    overflow-y: scroll;          /* allow vertical scrolling */
+    scroll-behavior: smooth;     /* smooth scrolling for modern feel */
+}
+/* Hide scrollbar visually for the page only */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;     /* Chrome, Safari, Opera */
+}
+html {
+    scrollbar-width: none;       /* Firefox */
+}
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+h1 {
+    color: #193B68;
+}
+.header h1 {
+    font-size: 40px;
+    font-weight: 600;
+    margin: 0;   
+    margin-bottom: 20px;
+}
+.category-label {
+    margin-top: 5px; /* smaller gap between header and label */
+    font-size: 18px; /* slightly bigger label */
+    color: #193B68;
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: 500;
+}
+.category-bar-container {
+    margin-top: 5px; /* smaller gap between label and buttons */
+}
+/*SEARCH*/
+/* Header already uses flex, so we align items */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Search + Button container */
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Search box */
+.search-box {
+    display: flex;
+    align-items: center;
+    background: white;
+    padding: 8px 12px;
+    border-radius: 20px; /* rounded corners */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+/* Search icon inside the box */
+.search-box i {
+    color: #193B68;
+    margin-right: 8px;
+}
+
+/* Search input */
+.search-box input {
+    border: none;
+    outline: none;
+    font-size: 14px;
+    width: 150px; /* adjust as needed */
+}
+/* Optional: input focus effect
+.search-box input:focus {
+    width: 200px;
+    transition: width 0.3s;
+}*/
+/*categories*/
+.category-content {
+    display: block;
+    margin-top: 20px;
+    /*background-color: white;*/
+    min-height: 300px;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.category-bar-container {
+    margin-top: 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    padding-bottom: 5px;
+    -ms-overflow-style: none;  /* hide scrollbar in IE and Edge */
+    scrollbar-width: none;     /* hide scrollbar in Firefox */
+}
+
+.category-bar-container::-webkit-scrollbar {
+    display: none; /* hide scrollbar in Chrome, Safari, Opera */
+}
+.category-bar-container button {
+    display: inline-block;
+    margin-right: 10px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    background-color: #2D69C9;
+    color: white;
+    font-size: 14px;
+    transition: 0.3s;
+}
+.category-bar-container button:hover {
+    background-color: #24529c;
+}
+.category-bar-container .category-btn {
+    background-color: transparent; /* no fill */
+    color: #193B68;               /* text color */
+    border: 2px solid #2D69C9;    /* border only */
+    transition: 0.3s;
+}
+.category-bar-container .category-btn:hover {
+    background-color: #2D69C9;    /* fill on hover */
+    color: rgb(255, 255, 255);                 /* text white on hover */
+}
+
+/* Content Area Below */
+.tools-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 20px;
+}
+.tool-card {
+    width: 150px;
+    border: 1px solid #bed4f0;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 15px;
+    background: #ffffff;
+}
+.tool-card img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+.tool-card.add-tool {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    color: #193B68;
+    background: #dbeafe;
+}
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+}
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.modal-content input {
+    padding: 5px;
+}
+.modal-content button {
+    padding: 8px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+}
+.no-image {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #e0e0e0;
+    color: #555;
+    font-size: 12px;
+    margin: 0 auto 10px;
+    border-radius: 5px;
+}
+
+/*individual page*/
+.tool-detail-page {
+    padding: 20px;
+}
+.back-btn {
+    padding: 6px 12px;
+    margin-bottom: 10px;
+    background: none;
+    color: #193B68;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.tool-detail-info {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.tool-detail-info img {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.family-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.family-member {
+    width: 120px;
+    border: 1px solid #bed4f0;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    background: #ffffff;
+    overflow: hidden;
+}
+.family-member div {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.family-member img {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 5px;
+}
+
+.add-family-btn {
+    padding: 8px 12px;
+    background: #2D69C9;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+}
+/*delete*/
+.delete-btn {
+    margin-top: 20px; /* space from family container */
+    background: rgb(238, 95, 95);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+.delete-btn:hover {
+    background: rgb(199, 79, 79);
+    color: white;
+}
+.add-family-wrapper input {
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 4px 6px;
+    width: 120px;
+    height: 20px; 
+}
+/*individual tools modal*/
+/* For the backdrop and modal visibility */
+.modal-backdrop.show {
+    z-index: 1040;
+    opacity: 0.4;
+}
+#cameraModal {
+    z-index: 1055; /* above backdrop */
+}
+/* Modal */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /* Black with transparency */
+    padding-top: 60px;
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+/* Modal Header */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Modal Image */
+.modal-image {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.modal-image img {
+    max-width: 100px;
+    height: auto;
+}
+
+/* Modal Form */
+.modal-body form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.modal-body input, .modal-body select {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.modal-body button {
+    margin-top: 15px;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* Edit Button Styling */
+.edit-btn {
+    background-color: #1d743a !important;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 10px !important;
+}
+
+.edit-btn:hover {
+    background-color: #1d743a;
+}
+
+/* Delete Button Styling */
+.delete-btn {
+    background-color: rgb(238, 95, 95) !important;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 10px !important;
+}
+
+.delete-btn:hover {
+    background-color: rgb(196, 72, 72);
+}
+/*CAMERA*/
+.scan-btn {
+    background-color: #2D69C9;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 20px; /* rounded corners */
+    cursor: pointer;
+    font-size: 17px;
+    transition: 0.3s;
+}
+.scan-btn:hover {
+    background-color: #24529c;
+}
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
