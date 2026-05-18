@@ -37,6 +37,168 @@
         </div>
     </div>
 </div>
+<!--SEARCH-->
+<div class="modal fade" id="searchModal" tabindex="-1">
+    
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        
+        <div class="modal-content modern-modal">
+
+            <!-- HEADER -->
+            <div class="modal-header">
+                <h5 class="modal-title">Item Details</h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body">
+
+                <div class="qr-image-container">
+                    <img src="assets/qr.png"
+                        alt="QR Code"
+                        class="img-fluid qr-code">
+                </div>
+
+                <form id="itemForm">
+
+                    <div class="row g-3">
+
+                        <div class="col-md-4">
+                            <label>Item Name</label>
+                            <input type="text"
+                                   class="form-control"
+                                   value="Screwdriver"
+                                   disabled>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Category</label>
+
+                            <select class="form-control"
+                                    id="categoryField"
+                                    disabled>
+
+                                <option>Electronics</option>
+                                <option>Driving</option>
+                                <option selected>CSS</option>
+                                <option>Automotive</option>
+
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Type</label>
+
+                            <select class="form-control"
+                                    id="typeField"
+                                    disabled>
+
+                                <option selected>Tools</option>
+                                <option>Equipment</option>
+                                <option>Materials</option>
+
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label>Serial No.</label>
+
+                            <input type="text"
+                                   class="form-control"
+                                   value="Yxxxxxxxx3"
+                                   disabled>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label>Model</label>
+
+                            <input type="text"
+                                   class="form-control"
+                                   value="P6xxxx"
+                                   disabled>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label>Consumable</label>
+
+                            <input type="text"
+                                   class="form-control"
+                                   value="No"
+                                   disabled>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label>Defective</label>
+
+                            <input type="number"
+                                   class="form-control"
+                                   value="0"
+                                   disabled>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label>Condition</label>
+
+                            <select class="form-control"
+                                    id="conditionField"
+                                    disabled>
+
+                                <option>Good</option>
+                                <option selected>Bad</option>
+
+                            </select>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label>Status</label>
+
+                            <select class="form-control"
+                                    id="statusField"
+                                    disabled>
+
+                                <option selected>Returned</option>
+                                <option>Not yet returned</option>
+
+                            </select>
+                        </div>
+
+                        <div class="col-12">
+                            <label>Description</label>
+
+                            <textarea class="form-control"
+                                      rows="3"
+                                      disabled>Assorted color and all usable</textarea>
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+            <!-- FOOTER -->
+            <div class="modal-footer">
+
+                <button id="editBtn"
+                        class="btn btn-success">
+                    Edit
+                </button>
+
+                <button id="saveBtn"
+                        class="btn btn-primary d-none">
+                    Save
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
 <!--category-->
 <div class="category-section">
     <!--div class="category-label">Category:</div-->
@@ -118,40 +280,123 @@
     // Show all tools by default on page load, excluding the "Add Tool" button
     allBtn.click();
 });
-/*CAMERA*/
+//0000000000
+/* =========================SEARCH INPUT========================= */
+const itemSearch = document.getElementById("itemSearch");
+
+itemSearch.addEventListener("keydown", function(e){
+
+    if(e.key === "Enter"){
+
+        e.preventDefault();
+
+        const value = itemSearch.value.trim();
+
+        // OPEN FOR ANY VALUE
+        if(value !== ""){
+
+            const searchModal =
+                new bootstrap.Modal(
+                    document.getElementById('searchModal')
+                );
+
+            searchModal.show();
+        }
+    }
+});
+
+
+/* =========================CAMERA========================= */
+
 let html5QrCode;
+let autoOpenTimer;
 
 document.querySelector(".scan-btn").addEventListener("click", () => {
-    const modal = new bootstrap.Modal(document.getElementById('cameraModal'));
-    modal.show();
+
+    const cameraModalEl =
+        document.getElementById('cameraModal');
+
+    const cameraModal =
+        new bootstrap.Modal(cameraModalEl);
+
+    cameraModal.show();
 
     setTimeout(() => {
+
         html5QrCode = new Html5Qrcode("reader");
 
         html5QrCode.start(
+
             { facingMode: "environment" },
+
             {
                 fps: 10,
                 qrbox: { width: 250, height: 250 }
             },
+
+            // SUCCESS SCAN
             (decodedText) => {
+
+                clearTimeout(autoOpenTimer);
+
                 alert("QR Code: " + decodedText);
-                html5QrCode.stop();
-                modal.hide();
+
+                html5QrCode.stop().then(() => {
+
+                    cameraModal.hide();
+
+                    const searchModal =
+                        new bootstrap.Modal(
+                            document.getElementById('searchModal')
+                        );
+
+                    searchModal.show();
+                });
             },
+
+            // ERROR
             (errorMessage) => {
-                // ignore scan errors
+                // ignore
             }
         );
+
+        // AUTO OPEN AFTER 4 SECONDS
+        autoOpenTimer = setTimeout(() => {
+
+            if(html5QrCode){
+
+                html5QrCode.stop().then(() => {
+
+                    cameraModal.hide();
+
+                    const searchModal =
+                        new bootstrap.Modal(
+                            document.getElementById('searchModal')
+                        );
+
+                    searchModal.show();
+
+                }).catch(err => console.log(err));
+            }
+
+        }, 4000);
+
     }, 500);
 });
+/* =========================STOP CAMER========================= */
 
-// Stop camera when modal is closed
-document.getElementById('cameraModal').addEventListener('hidden.bs.modal', () => {
-    if (html5QrCode) {
-        html5QrCode.stop().catch(err => console.log(err));
+document.getElementById('cameraModal')
+.addEventListener('hidden.bs.modal', () => {
+
+    clearTimeout(autoOpenTimer);
+
+    if(html5QrCode){
+
+        html5QrCode.stop()
+        .catch(err => console.log(err));
     }
 });
+//000000000
 
     function updateCategoryButtons() {
         const buttons = Array.from(categoryBar.querySelectorAll('.category-btn'));
@@ -245,34 +490,6 @@ document.getElementById('cameraModal').addEventListener('hidden.bs.modal', () =>
         }
     ]
 };
-    /*function renderTools(category){
-        toolsContainer.innerHTML = `
-            <div class="tool-card add-tool" id="addToolBtn">
-                <i class="fa fa-plus"></i>
-                <span>Add Tool</span>
-            </div>
-        `;
-        if(toolsData[category]){
-            toolsData[category].forEach(tool => {
-                const card = document.createElement('div');
-                card.className = 'tool-card';
-                card.innerHTML = `
-                    ${tool.image ? `<img src="${tool.image}" alt="${tool.name}">` : `<div class="no-image">No picture added</div>`}
-                    <div>${tool.name}</div>
-                    <div class="clickable">Quantity: ${tool.quantity}</div>
-                    <div class="clickable">Borrowed: ${tool.borrowed}</div>
-                `;
-                card.addEventListener('click', () => {
-                    alert(`Tool: ${tool.name}`);
-                });
-                toolsContainer.appendChild(card);
-            });
-        }
-
-        document.getElementById('addToolBtn').addEventListener('click', () => {
-            toolModal.style.display = 'flex';
-        });
-    }*/
 
     // Modal events
     closeModal.onclick = () => toolModal.style.display = 'none';

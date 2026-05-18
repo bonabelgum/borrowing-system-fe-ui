@@ -443,3 +443,27 @@ h1 {
     align-items: center;
     gap: 10px;
 }
+
+/* FIX BOOTSTRAP MODAL */
+#searchModal .modal-content{
+    background: #fff !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    color: #000;
+}
+#searchModal{
+    z-index: 9999;
+}
+.modal-backdrop{
+    z-index: 9998;
+}
+.qr-image-container{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.qr-code{
+    width: 140px;
+    height: auto;
+}
